@@ -1,0 +1,27 @@
+{
+  "name": "gao7",
+  "version": "1.0.0",
+  "description": "mutil_power",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laiyangde/gao7.git"
+  },
+  "keywords": [
+    "server"
+  ],
+  "author": "laiyangde",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/laiyangde/gao7/issues"
+  },
+  "homepage": "https://github.com/laiyangde/gao7#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "canvas": "^1.4.0",
+  }
+}
