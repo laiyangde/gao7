@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dom2String</title>
+    <script src="../js/jquery.min.js"></script>
+</head>
+<style>
+    *{margin: 0;padding: 0;}
+    .body{width: 960px;margin: 0 auto}
+    textarea{width: 100%;display: block;margin-top: 10px;height: 300px;font-size: 16px;padding:10px;}
+    #btn{    width: 8em;
+    height: 3em;
+    margin-top: 20px;
+    float: right;cursor: pointer;}
+</style>
+<body>
+    <section class="body">
+        <p style="margin-top: 20px">输入</p>
+        <textarea name="sourcehtm" id="sourcehtm" placeholder="<!-- 贴上您的HTML代码 -->"></textarea>
+        <input type="button" id="btn" value="解析代码">
+        <p style="margin-top: 54px">输出</p>
+
+        <textarea name="targethtm" id="targethtm"></textarea>
+    </section>
+    <script>
+        $('#btn').click(function(event) {
+            var sourcehtm=$('#sourcehtm').val()
+            var targethtm=sourcehtm.replace(/\n/mg,'').replace(/>\s+</mg,'><').replace(/^\"?/,"'").replace(/\"?$/,"'")
+            console.log(targethtm)
+            $('#targethtm').val(targethtm)
+        });
+    </script>
+</body>
+</html>
