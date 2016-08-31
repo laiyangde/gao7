@@ -1,9 +1,9 @@
 ﻿var express = require('express'),
     app = express(),
     // router = express.Router(),
-    getBuffer = require('./getBuffer'),
-    colorBuffer=getBuffer.colorBuffer,
-    ImageBuffer=getBuffer.ImageBuffer,
+    sendStream = require('./sendStream'),
+    colorStream=sendStream.colorStream,
+    ImageStream=sendStream.ImageStream,
     cacheTime=60 * 60 * 24 * 7,
     setting={
     width:200,
@@ -26,7 +26,7 @@ function analysisRequest(req,res){
         'Expires': new Date(Date.now() + cacheTime * 1000).toUTCString()
     })
     if (req.params.imgSize===undefined) {
-        colorBuffer(setting.width,setting.height,'#'+setting.color,res)
+        colorStream(setting.width,setting.height,'#'+setting.color,res)
         return
     }
     var _imgSize=req.params.imgSize.split('x'),
@@ -34,7 +34,7 @@ function analysisRequest(req,res){
         _height=parseInt(_imgSize[1]) || _width,
         _color=req.params.imgColor;
         if (_color===undefined) {
-            ImageBuffer(_width,_height,res)
+            ImageStream(_width,_height,res)
             return;
         }
         if (_color==='r') {
@@ -42,7 +42,7 @@ function analysisRequest(req,res){
         }else{
             _color=_color.length >2 && !/[^0-9A-Fa-f]/.test(_color) ? _color : setting.color;
         }
-        colorBuffer(_width,_height,'#'+_color,res)
+        colorStream(_width,_height,'#'+_color,res)
 }
 
 function respondWithError(res,txt) {

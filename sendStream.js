@@ -10,7 +10,7 @@ var Canvas = require('canvas'),
     sectionD=['d1.jpg','d2.jpg','d3.png','d4.png','d5.jpg','d6.jpg'],//宽高比1.25-2.4的部分随机
     sectionE=['e1.jpg','e2.jpg','e3.jpg','e4.jpg','e5.jpg','e6.jpg'];//宽高比大于2.4的部分随机
 
-module.exports.colorBuffer = function (width,height,color,res){
+module.exports.colorStream = function (width,height,color,res){
         ctx.clearRect(_canvas.width,_canvas.height)
         _canvas.width=width;
         _canvas.height=height;
@@ -26,7 +26,7 @@ module.exports.colorBuffer = function (width,height,color,res){
         _canvas.createJPEGStream().pipe(res)
 }
 
-module.exports.ImageBuffer = function (width,height,res){
+module.exports.ImageStream = function (width,height,res){
     _canvas.width=width;
     _canvas.height=height;
     var img = new Image(),buf,sx=0,sy=0,sHeight,sWidth,wRaido,hRadio,radio=width/height,pic,picLen;
