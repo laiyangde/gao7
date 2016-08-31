@@ -1,29 +1,33 @@
 ﻿var express = require('express'),
     app = express(),
-    fs=require('fs'),
     // router = express.Router(),
     getBuffer = require('./getBuffer'),
+    colorBuffer=getBuffer.colorBuffer,
+    ImageBuffer=getBuffer.ImageBuffer,
     cacheTime=60 * 60 * 24 * 7,
     setting={
     width:200,
     height:200,
     color:'aaaaaa'
     };
+    console.log(getBuffer)
 app.use(express.static('public'))
-// app.get(['/placehold','/placehold/:imgSize','/placehold/:imgSize/:imgColor'],analysisRequest);
+app.get('/',function(){
+
+})
+app.get(['/placehold','/placehold/:imgSize','/placehold/:imgSize/:imgColor'],analysisRequest);
 app.get('/placehold',analysisRequest);
 app.get('/placehold/:imgSize',analysisRequest);
 app.get('/placehold/:imgSize/:imgColor',analysisRequest);
 app.listen(80);
-
 function analysisRequest(req,res){
     res.set({
-        'Content-Type': 'image/png',
+        'Content-Type': 'image/jpeg',
         'Cache-Control': 'public, max-age=' + cacheTime,
         'Expires': new Date(Date.now() + cacheTime * 1000).toUTCString()
     })
     if (req.params.imgSize===undefined) {
-        res.end(getBuffer(setting.width,setting.height,'#'+setting.color))
+        colorBuffer(setting.width,setting.height,'#'+setting.color,res)
         return
     }
     var _imgSize=req.params.imgSize.split('x'),
@@ -31,14 +35,15 @@ function analysisRequest(req,res){
         _height=parseInt(_imgSize[1]) || _width,
         _color=req.params.imgColor;
         if (_color===undefined) {
-            
+            ImageBuffer(_width,_height,res)
+            return;
         }
         if (_color==='r') {
             _color=('00000'+(Math.random()*0x1000000<<0).toString(16)).slice(-6)
         }else{
             _color=_color.length >2 && !/[^0-9A-Fa-f]/.test(_color) ? _color : setting.color;
         }
-        res.end(getBuffer(_width,_height,'#'+_color));
+        colorBuffer(_width,_height,'#'+_color,res)
 }
 
 function respondWithError(res,txt) {
