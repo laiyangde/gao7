@@ -10,7 +10,6 @@
     height:200,
     color:'aaaaaa'
     };
-    console.log(getBuffer)
 app.use(express.static('public'))
 app.get('/',function(){
 
