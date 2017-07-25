@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片上传</title>
+    <script src="../js/jquery.min.js"></script>
+    <link rel="stylesheet" href="../css/common.css">
+</head>
+<style>
+/*    *{margin: 0;padding: 0;}
+    .body{width: 960px;margin: 0 auto}
+    textarea{width: 100%;display: block;margin-top: 10px;height: 300px;font-size: 16px;padding:10px;}
+    #btn{    width: 8em;
+    height: 3em;
+    margin-top: 20px;
+    float: right;cursor: pointer;}*/
+</style>
+<body>
+    <header class="header">
+        <nav class="upload">
+            <a href="/">首页</a>
+            <a href="../Dom2String/">dom转String</a>
+            <a href="../httpProxy/">本地调试不跨域</a>
+            <a href="../upload" class="active">上传图片</a>
+            <a href="../placehold">图片站位</a>
+            <i></i>
+        </nav>
+    </header>
+    <section class="body">
+    <p>上传图片到随机图片库! 这样随机图片站位符时可以随机到！图片尺寸尽量大，大小尽量小</p>
+        <input type="file" class="file" accept="image/*">
+    </section>
+    <script>
+       var file=$('.file'),files,radio;
+            file.change(function(){
+                files=file[0].files[0]
+                if (files.size>400*1024) {
+                    alert('图片不能大于400k')
+                    return
+                }
+                Reader = new FileReader();
+                Reader.readAsDataURL(files);
+                Reader.onload=function(e){
+                    var img=new Image()
+                    img.src=this.result;
+                    img.onload=function(){
+                        radio=img.width/img.height;
+                        $('body').append($(img))
+                        var _formData = new FormData();
+                        _formData.append("myImage",files);
+                        _formData.append("radio",radio);
+                        $.ajax({
+                            url: "http://192.168.1.39/uploadImage",
+                            type: "post",
+                            data: _formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            dataType: "json",
+                            success: function(data) {
+                                alert('上传成功')
+                            }
+                        });
+                    }
+                }
+            })
+           
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>跨域问题</title>
+    <script src="../js/jquery.min.js"></script>
+    
+</head>
+<style>
+    /**{margin: 0;padding: 0;}*/
+body {
+    background: #f8f8f8;
+    color: #333;
+    -webkit-backface-visibility: hidden;
+    font: 12px/1.5 'Microsoft YaHei',Arial,Helvetica,sans-serif;
+}
+    a:link, a:visited {
+    text-decoration: none;
+}
+    a {
+    color: #333;
+    -webkit-tap-highlight-color: rgba(0,0,0,.1);
+}
+a, input, button {
+    outline: 0;
+    border: 0;
+}
+.header{}
+.header nav{width: 1000px;margin: 0 auto;height: 45px;/*position: relative;*/display:-moz-box;display:-ms-box;display:-webkit-box;display:-webkit-flex;display:flex;}
+
+.header nav a{
+    font-size: 20px;
+    display: block;
+    /*float: left;*/
+    /*padding: 0 53px;*/
+    line-height: 45px;
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+    flex:1;
+    overflow: hidden;
+}
+
+.header nav a:after,.header nav a:before{
+    height: 4px;width: 50%;display: block;background-color: #f55;position: absolute;left: 0;bottom:0;transition: all 0.2s;
+    box-sizing: border-box;
+    content: ''
+}
+
+.header nav a:before{
+    border-top-left-radius:2px;
+    border-bottom-left-radius:2px;
+    left: -50%;
+}
+.header nav a:after{
+    border-top-right-radius:2px;
+    border-bottom-right-radius:2px;
+    left: 100%;
+}
+.header nav .active:before{left: 0;}
+.header nav .active:after{left: 50%;}
+
+
+.header nav a:hover{overflow: visible;}
+.header nav a:hover:before{
+    left: 0;
+}
+.header nav a:hover:after{
+    left: 50%;
+}
+
+    .body{width: 960px;margin: 0 auto;}
+    .red{color: #f55}
+    .test > *{display: block;line-height: 2;}
+    .title{font-size: 25px;font-weight: bold;}
+    .radio{margin: 20px 0}
+    #paramipt{display: block;width: 600px;height: 200px;}
+</style>
+<body>
+    <header class="header">
+        <nav class="httpProxy">
+            <a href="/">首页</a>
+            <a href="../Dom2String/">dom转String</a>
+            <a href="../httpProxy/" class="active">本地调试不跨域</a>
+            <a href="../upload">上传图片</a>
+            <a href="../placehold">图片站位</a>
+            <i></i>
+        </nav>
+    </header>
+    <section class="body">
+        <p><span class="title">说明：</span>解决本地调试返回json时跨域问题，让本地可以调试！</p>
+        <p><span class="title">跨域接口：</span>http://192.168.1.39/httpProxyData</p>
+        <p><span class="title">使用方式:</span> 比如我们要访问http://www.zuoshuiyin.com/Template/GetDetail这个接口。在参数里<span class="red">多添加host（接口域名），path（接口路径）</span>两个参数</p>
+        <img src="explain.png" alt="">
+        <p class="title">测试:</p>
+        <div class="test">
+
+
+            <label for="domain">请填写域名：</label>
+            <input type="text" id="domain" value="www.zuoshuiyin.com">
+            <label for="path">请填写路径：</label>
+            <input type="text" id="path" value="/Template/GetDetail">
+        </div>
+        <div class="params">
+            <p>请填写参数:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>key</th>
+                        <th>value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="key" value="templateId"></td>
+                        <td><input type="text" class="value" value="76"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="button" value="增加参数" class="addparam">
+
+        </div>
+        <div class="radio">
+            <label for="post">POST:</label>
+            <input type="radio" name="method" id="post" checked value="post">
+            <label for="get">GET:</label>
+            <input type="radio" name="method" id="get" value="get">
+        </div> 
+
+        <input type="button" class="btn" value="点击跨域">
+
+        <p class="title">结果</p>
+        <div class="result">
+
+        </div>
+    </section>
+    <script>
+    $('.addparam').click(function(){
+        $('.params tbody').append('<tr><td><input type="text" class="key"></td><td><input type="text" class="value"></td></tr>')
+    })
+
+    $('.btn').click(function(){
+        var domain= $.trim($('#domain').val())
+        if (!domain) {alert('填写域名');return;}
+        var path= $.trim($('#path').val())
+        if (!path) {alert('填写路径');return;}
+        var _data={
+            host:domain,
+            path:path
+        }
+        var _keys=$('.key')
+        var _values=$('.value')
+        var len=_keys.length,_key,_value;
+
+        for(i=0;i<len;i++){
+             _key=$.trim(_keys.eq(i).val());
+             _value=$.trim(_values.eq(i).val());
+             if (_key==''|| _value=='') continue;
+             _data[_key]=_value;
+        }
+        $.ajax({
+            type: $('.radio').find('input:checked').val(),
+            url: "http://192.168.1.39/httpProxyData",
+            data:_data,
+            dataType: "json",
+            success: function(data){
+                console.log(data) 
+                $('.result').text(JSON.stringify(data))
+            }
+         });
+    })      
+    </script>
+</body>
+</html>
